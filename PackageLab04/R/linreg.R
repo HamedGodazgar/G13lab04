@@ -67,3 +67,76 @@ function(formula , data) {
   return(return_obj)
   
 }
+
+
+
+
+print.linreg <- function(obj){
+  cat("Call:\n")
+  print(obj$call)
+  cat("\nCoefficients:\n")
+  print(obj$Coefficients)
+  
+}
+print(mod_object)
+
+resid.linreg <- function(obj){
+  return(obj$residuals)
+  
+}
+resid(mod_object)
+pred <- function(obj){
+  return(obj$fitted.values)
+  
+}
+pred(mod_object)
+
+coef.linreg <- function(obj){
+  names(obj$Coefficients)
+  
+  
+}
+coef(mod_object)
+
+
+
+
+summary.linreg <- function(obj)
+{
+  se <- sqrt(diag(obj$vcov))
+  tval <- obj$t_value
+  TAB <- cbind(Estimate = obj$Coefficients,
+               StdErr = se,
+               t.value = tval,
+               p.value = 2*pt(-abs(tval), df=obj$degfreedom))
+  res <- list(call=obj$call,
+              coefficients=TAB)
+  class(res) <- "summary.linreg"
+  print(res)
+  cat("\nResidual standard error:" , obj$varr ,"on", obj$degfreedom ,"degrees of freedom")
+}
+summary(mod_object)
+
+
+
+
+
+
+
+plot.linreg <- function(obj) {
+  library(ggplot2)
+  par(mfrow=c(2,1))
+  ggplot(obj$Petal.Length,aes(x = obj$fitted.values, y = obj$residuals),
+         color="steelblue")+
+    geom_point(shape=1,size=4) + geom_smooth(method="lm", colour="red",
+                                             se = FALSE)+
+    labs(title="Residuals vs Fitted",x="Fitted values
+      linreg(Petal.Length~Species, data = iris)", y="Residuals")+
+    theme(plot.title = element_text(hjust = 0.5),
+          panel.background = element_rect(fill = "white", colour = "grey50"))
+  
+  
+  
+  
+}
+plot(mod_object)
