@@ -130,11 +130,11 @@ plot.linreg <- function(object) {
     geom_point(shape=1,size=4) + geom_smooth(method="lm", colour="red",
                                              se = FALSE)+ 
     labs(title="Scale−Location",x="Fitted values
-  linreg(Petal.Length~Species)", y=expression(sqrt(abs("Standard resduals"))))+
+  linreg(Petal.Length~Species, data = iris)", y=expression(sqrt(abs("Standard resduals"))))+
     theme(plot.title = element_text(hjust = 0.5),panel.background = 
             element_rect(fill = "white", colour = "grey50"))
   
-  plot_grid(sp, bp, ncol = 1, nrow = 2)
+  plot_grid(bp, sp, ncol = 1, nrow = 2)
   
 }
 
