@@ -1,3 +1,27 @@
+
+
+#' @author Hamed , Omid
+#' @description Implementing Liear Regression using QR Decomposition
+#' @examples 
+#' mod_object <- linreg(Petal.Length~Species, data = iris)
+#' print(mod_object)
+#' resid(mod_object)
+#' @export linreg
+#' @exportS3Method 
+#' print()
+#' plot()
+#' resid()
+#' pred()
+#' coef()
+#' summary()
+#' @import ggplot2
+#' @name linreg
+#' @param formula
+#' @param data
+#' @references \url{http://staff.www.ltu.se/~jove/courses/c0002m/least_squares.pdf}
+#' @title linreg
+#' @usage linreg(formula,data)
+
 linreg <-
 function(formula , data) {
   
