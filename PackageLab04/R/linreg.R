@@ -94,14 +94,6 @@ coef.linreg <- function(obj){
 }
 
 # summary method
-
-summary.linreg <- function(obj){
-  
-  out <- cbind(1,obj$Coefficients)
-  return(out)
-}
-summary(linreg_mod)
-
 summary.linreg <- function(obj)
 {
   se <- sqrt(diag(obj$vcov))
@@ -117,8 +109,6 @@ summary.linreg <- function(obj)
   print(res)
   cat("\nResidual standard error:" , obj$varr ,"on", obj$degfreedom ,"degrees of freedom")
 }
-summary(linreg_mod)
-summary(mod_object)
 
 
 # plot method

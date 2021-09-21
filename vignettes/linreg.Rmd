@@ -1,5 +1,6 @@
 ---
-title: "linreg"
+title: "PackageLab04"
+author: 'Hamed&Omid'
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{linreg}
