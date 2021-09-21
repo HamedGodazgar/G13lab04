@@ -1,0 +1,182 @@
+---
+title: "linreg"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{linreg}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(PackageLab04)
+```
+
+
+In statistics, linear regression is a linear approach for modelling the
+relationship between a scalar response and one or more explanatory
+variables (also known as dependent and independent variables). The case
+of one explanatory variable is called simple linear regression; for more
+than one, the process is called multiple linear regression. This term is
+distinct from multivariate linear regression, where multiple correlated
+dependent variables are predicted, rather than a single scalar variable.
+
+In this package we used Linear Regression and QR Decomposition for
+calculations. Moreover, we created 5 methods in this package includes:
+
+-   print()
+
+-   plot()
+
+-   resid()
+
+-   pred()
+
+-   coef()
+
+-   summary()
+
+You can find codes in sections bellow:
+
+The first step is to calculate items such as betahat :
+
+```{r 'linreg function'}
+
+linreg <- function(formula , data) {
+  
+  # use model.matrix() to create the matrix X (independent variables)
+  X <- model.matrix(formula,data)
+  
+  # pick out the dependent variable y using all.vars()
+  y <- data[all.vars(formula)[1]]
+  yy <- data[all.vars(formula)[1]]
+  ## QR factorization
+  QR <- qr(X)
+  r <- QR$rank
+  piv <- QR$pivot[1:r]
+  
+  ## estimate identifiable coefficients
+  betahat <- solve.qr(QR, y)
+  
+  ## fitted values
+  yhat <- as.vector(c(X[, piv] %*% betahat))
+  y <-as.matrix( data[all.vars(formula)[1]])
+  ## residuals
+  resi <- as.vector(y - yhat)
+  
+  ## degree of freedom
+  dof <- nrow(X) - r
+  
+  ## error variance
+  se2 <- c(crossprod(resi)) / dof
+  
+  ## variance-covariance for coefficients
+  v <- chol2inv(QR$qr, r) * se2
+  
+  ## t-value
+  tval <- betahat / sqrt(diag(v))
+  
+  ## return
+  return_obj <- list(Coefficients = betahat, fitted.values = yhat,
+                     residuals = resi, degfreedom = dof,
+                     vcov = v, varr = sqrt(se2), t_value = tval,call=match.call(), Y = yy)
+  
+  class(return_obj) <- 'linreg'
+  return(return_obj)
+  
+}
+
+```
+
+
+The function above returns an object, therefore we should create an
+object with this function:
+
+```{r 'Create Object'}
+
+mod_object <- linreg(Petal.Length~Species, data = iris)
+
+```
+
+
+Now, we have object 'mod_object' and we can create methods which
+mentioned above:
+
+```{r 'print'}
+
+print.linreg <- function(obj){
+  cat("Call:\n")
+  print(obj$call)
+  cat("\nCoefficients:\n")
+  print(obj$Coefficients)
+  
+}
+print(mod_object)
+
+```
+
+
+```{r 'plot'}
+
+```
+
+
+```{r 'resid'}
+
+resid.linreg <- function(obj){
+  return(obj$residuals)
+  
+}
+resid(mod_object)
+
+```
+
+
+```{r 'pred'}
+
+pred <- function(obj){
+  return(obj$fitted.values)
+  
+}
+pred(mod_object)
+
+```
+
+
+```{r 'coef'}
+
+coef.linreg <- function(obj){
+  names(obj$Coefficients)
+  
+  
+}
+coef(mod_object)
+
+```
+
+
+```{r 'summary'}
+
+summary.linreg <- function(obj)
+{
+  se <- sqrt(diag(obj$vcov))
+  tval <- obj$t_value
+  TAB <- cbind(Estimate = obj$Coefficients,
+               StdErr = se,
+               t.value = tval,
+               p.value = 2*pt(-abs(tval), df=obj$degfreedom))
+  res <- list(call=obj$call,
+              coefficients=TAB)
+  class(res) <- "summary.linreg"
+  print(res)
+  cat("\nResidual standard error:" , obj$varr ,"on", obj$degfreedom ,"degrees of freedom")
+}
+summary(mod_object)
+
+```
