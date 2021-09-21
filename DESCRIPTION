@@ -1,0 +1,14 @@
+Package: PackageLab04
+Type: Package
+Title: linear regression package in R
+Version: 1.0.0
+Date: 2021-09-17
+Author: Hamed Godazgar, Omid Lavakhamseh
+Maintainer: Hamed Godazgar <hamed.godazgar@gmail.com>
+Description: Creating Linear Regression Model in R.
+License: GPL (>= 2)
+LazyData: true
+Encoding: UTF-8
+RoxygenNote: 7.1.2 
+Imports: ggplot2
+Depends: R (>= 3.5)
